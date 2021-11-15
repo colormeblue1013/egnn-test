@@ -18,6 +18,8 @@ class NBodyDataset():
             self.sufix += "_charged5_initvel1"
         elif dataset_name == "nbody_small" or dataset_name == "nbody_small_out_dist":
             self.sufix += "_charged5_initvel1small"
+        elif dataset_name == "nbody_50train":
+            self.sufix += "_charged5_initvel150train"
         else:
             raise Exception("Wrong dataset name %s" % self.dataset_name)
 
@@ -91,12 +93,13 @@ class NBodyDataset():
         loc, vel, edge_attr, charges = self.data
         loc, vel, edge_attr, charges = loc[i], vel[i], edge_attr[i], charges[i]
 
-        if self.dataset_name == "nbody":
+        if self.dataset_name == "nbody" or 'nbody_50train':
             frame_0, frame_T = 6, 8
         elif self.dataset_name == "nbody_small":
             frame_0, frame_T = 30, 40
         elif self.dataset_name == "nbody_small_out_dist":
             frame_0, frame_T = 20, 30
+
         else:
             raise Exception("Wrong dataset partition %s" % self.dataset_name)
 

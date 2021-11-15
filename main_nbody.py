@@ -11,7 +11,11 @@ parser = argparse.ArgumentParser(description='VAE MNIST Example')
 parser.add_argument('--exp_name', type=str, default='exp_1', metavar='N', help='experiment_name')
 parser.add_argument('--batch_size', type=int, default=100, metavar='N',
                     help='input batch size for training (default: 128)')
+'''
 parser.add_argument('--epochs', type=int, default=10000, metavar='N',
+                    help='number of epochs to train (default: 10)')
+'''
+parser.add_argument('--epochs', type=int, default=1000, metavar='N',
                     help='number of epochs to train (default: 10)')
 
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -89,11 +93,18 @@ def main():
     dataset_train = NBodyDataset(partition='train', dataset_name=args.dataset,
                                  max_samples=args.max_training_samples)
     loader_train = torch.utils.data.DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True, drop_last=True)
-
-    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_small")
+    '''
+    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_small") # 这里不同训练集大小始终使用的是同一组验证集,测试集
     loader_val = torch.utils.data.DataLoader(dataset_val, batch_size=args.batch_size, shuffle=False, drop_last=False)
 
     dataset_test = NBodyDataset(partition='test', dataset_name="nbody_small")
+    loader_test = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, shuffle=False, drop_last=False)
+    '''
+
+    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_50train")  # 这里不同训练集大小始终使用的是同一组验证集,测试集
+    loader_val = torch.utils.data.DataLoader(dataset_val, batch_size=args.batch_size, shuffle=False, drop_last=False)
+
+    dataset_test = NBodyDataset(partition='test', dataset_name="nbody_50train")
     loader_test = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, shuffle=False, drop_last=False)
 
 
@@ -184,6 +195,7 @@ def train(model, optimizer, epoch, loader, backprop=True):
             loc_dist = torch.sum((loc[rows] - loc[cols])**2, 1).unsqueeze(1)  # relative distances among locations
             edge_attr = torch.cat([edge_attr, loc_dist], 1).detach()  # concatenate all edge properties
             loc_pred = model(nodes, loc.detach(), edges, vel, edge_attr)
+
         elif args.model == 'baseline':
             backprop = False
             loc_pred = model(loc)
