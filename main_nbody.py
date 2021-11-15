@@ -94,14 +94,14 @@ def main():
                                  max_samples=args.max_training_samples)
     loader_train = torch.utils.data.DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True, drop_last=True)
     '''
-    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_small") # 这里不同训练集大小始终使用的是同一组验证集,测试集
+    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_small") # the same valid/test
     loader_val = torch.utils.data.DataLoader(dataset_val, batch_size=args.batch_size, shuffle=False, drop_last=False)
 
     dataset_test = NBodyDataset(partition='test', dataset_name="nbody_small")
     loader_test = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, shuffle=False, drop_last=False)
     '''
 
-    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_50train")  # 这里不同训练集大小始终使用的是同一组验证集,测试集
+    dataset_val = NBodyDataset(partition='val', dataset_name="nbody_50train")  # the same valid/test
     loader_val = torch.utils.data.DataLoader(dataset_val, batch_size=args.batch_size, shuffle=False, drop_last=False)
 
     dataset_test = NBodyDataset(partition='test', dataset_name="nbody_50train")
